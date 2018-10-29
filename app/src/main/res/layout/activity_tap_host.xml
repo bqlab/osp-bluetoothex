@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context="com.example.jyseo.han3.TabHostActivity">
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout"
+        />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/linearLayout"
+        android:background="#27AE60">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:background="@drawable/heart"
+        android:id="@+id/bt_tab1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_alignParentLeft="true"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:text="Tab 1"/>
+
+    <ImageView
+        android:id="@+id/bt_tab2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/user"
+        android:text="Tab 2" />
+
+
+    <ImageView
+        android:layout_alignParentRight="true"
+        android:id="@+id/bt_tab3"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/line"
+        android:text="Tab 3" />
+
+
+</RelativeLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
