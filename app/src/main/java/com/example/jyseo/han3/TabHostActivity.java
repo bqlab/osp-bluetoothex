@@ -16,14 +16,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView bt_tab1, bt_tab2, bt_tab3;
     private BluetoothService bluetoothService;
 
-    private final Handler handler = new Handler() {
-        @Override
-        public void handlerMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    };
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tap_host);

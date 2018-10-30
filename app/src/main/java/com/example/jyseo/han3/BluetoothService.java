@@ -1,31 +1,104 @@
 package com.example.jyseo.han3;
 
 import android.app.Activity;
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
+import android.widget.Toast;
 
-import java.util.logging.Handler;
+import java.lang.reflect.AccessibleObject;
 
-public class BluetoothService {
-    private BluetoothAdapter bluetoothAdapter;
-    private Activity activity;
-    private Handler handler;
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import app.akexorcist.bluetotohspp.library.BluetoothState;
+import app.akexorcist.bluetotohspp.library.DeviceList;
 
-    public BluetoothService(Activity activity, Handler handler) {
-        this.activity = activity;
-        this.handler = handler;
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+public class BluetoothService extends Service implements Runnable {
+    private BluetoothSPP bluetoothSPP;
+
+    public Activity activity;
+    public boolean isConnected;
+    public int hartrate;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        setBluetoothSPP();
+        connectBluetooth();
     }
 
-    public void connectBluetooth() {
-        if(bluetoothAdapter != null) {
-            if(bluetoothAdapter.isEnabled()) {
-                
-            } else {
-                activity.startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        hartrate = 0;
+        isConnected = false;
+        bluetoothSPP.stopService();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+        if (!bluetoothSPP.isBluetoothEnabled()) {
+            startService(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        } else {
+            if (!bluetoothSPP.isServiceAvailable()) {
+                bluetoothSPP.setupService();
+                bluetoothSPP.startService(BluetoothState.DEVICE_OTHER);
             }
-        } else
-            Log.d("BluetoothService", "Bluetooth isn't available.");
+        }
+    }
+
+    //https://blog.codejun.space/13 참고는 여기
+    
+    @Override
+    public void run() {
+
+    }
+
+    private void setBluetoothSPP() {
+        bluetoothSPP = new BluetoothSPP(activity);
+        if (!bluetoothSPP.isBluetoothAvailable()) {
+            Toast.makeText(getApplicationContext(), "블루투스를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
+            activity.finish();
+        }
+        bluetoothSPP.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
+            @Override
+            public void onDataReceived(byte[] data, String message) {
+                hartrate = Integer.parseInt(message);
+            }
+        });
+        bluetoothSPP.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
+            @Override
+            public void onDeviceConnected(String name, String address) {
+                Toast.makeText(getApplicationContext(), "블루투스 연결을 성공하였습니다.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDeviceDisconnected() {
+                Toast.makeText(getApplicationContext(), "블루투스 연결이 끊겼습니다.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDeviceConnectionFailed() {
+                Toast.makeText(getApplicationContext(), "블루투스 연결을 실패하였습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void connectBluetooth() {
+
+        if (bluetoothSPP.getServiceState() == BluetoothState.STATE_CONNECTED)
+            bluetoothSPP.disconnect();
+        else
+            startService(new Intent(getApplicationContext(), DeviceList.class));
     }
 }
