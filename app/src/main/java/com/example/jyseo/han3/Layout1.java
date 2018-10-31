@@ -1,14 +1,16 @@
 package com.example.jyseo.han3;
 
+import android.app.Activity;
 import android.content.Context;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Layout1 extends FrameLayout {
     private Context context;
     private TextView f1Hartrate;
-    private int hartrate;
 
     public Layout1(Context context) {
         super(context);
@@ -23,7 +25,6 @@ public class Layout1 extends FrameLayout {
     }
 
     public void setHartrate(int hartrate) {
-        this.hartrate = hartrate;
         f1Hartrate.setText(hartrate);
     }
 }
