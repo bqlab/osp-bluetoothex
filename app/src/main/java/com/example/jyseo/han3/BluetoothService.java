@@ -15,12 +15,12 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
-public class BluetoothService extends Service implements Runnable {
+public class BluetoothService extends Service {
     private BluetoothSPP bluetoothSPP;
+    private Activity activity;
 
-    public Activity activity;
-    public boolean isConnected;
-    public int hartrate;
+    public static boolean isConnected;
+    public static int hartrate;
 
     @Override
     public void onCreate() {
@@ -43,25 +43,21 @@ public class BluetoothService extends Service implements Runnable {
         return null;
     }
 
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
         if (!bluetoothSPP.isBluetoothEnabled()) {
-            startService(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startService(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
         } else {
             if (!bluetoothSPP.isServiceAvailable()) {
                 bluetoothSPP.setupService();
                 bluetoothSPP.startService(BluetoothState.DEVICE_OTHER);
             }
         }
+        return super.onStartCommand(intent, flags, startId);
     }
 
-    //https://blog.codejun.space/13 참고는 여기
-    
-    @Override
-    public void run() {
-
+    public void setActivity(Activity activity){
+        this.activity = activity;
     }
 
     private void setBluetoothSPP() {

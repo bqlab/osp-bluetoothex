@@ -21,6 +21,7 @@
                 android:layout_height="100dp"
                 android:background="@drawable/cardiogram"/>
             <TextView
+                android:id="@+id/f1_hartrate"
                 android:layout_gravity="bottom"
                 android:textColor="#F25038"
                 android:textStyle="bold"
