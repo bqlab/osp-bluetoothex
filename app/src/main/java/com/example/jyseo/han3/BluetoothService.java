@@ -17,8 +17,6 @@ import app.akexorcist.bluetotohspp.library.DeviceList;
 
 public class BluetoothService extends Service {
     private BluetoothSPP bluetoothSPP;
-    private Activity activity;
-
     public static boolean isConnected;
     public static int hartrate;
 
@@ -56,15 +54,10 @@ public class BluetoothService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public void setActivity(Activity activity){
-        this.activity = activity;
-    }
-
     private void setBluetoothSPP() {
-        bluetoothSPP = new BluetoothSPP(activity);
+        bluetoothSPP = new BluetoothSPP(getApplicationContext());
         if (!bluetoothSPP.isBluetoothAvailable()) {
             Toast.makeText(getApplicationContext(), "블루투스를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
-            activity.finish();
         }
         bluetoothSPP.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             @Override

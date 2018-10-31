@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
 
-    tools:context="com.example.jyseo.han3.Fragment1">
+    tools:context="com.example.jyseo.han3.Layout1">
 
     <LinearLayout
         android:layout_width="match_parent"
