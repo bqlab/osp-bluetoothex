@@ -11,52 +11,53 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout"
-        />
+        android:layout_above="@+id/linearLayout" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:id="@+id/linearLayout"
-        android:background="#27AE60">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <ImageView
-        android:background="@drawable/heart"
-        android:id="@+id/bt_tab1"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="6dp"
-        android:layout_alignParentLeft="true"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="Tab 1"/>
+        android:background="#27AE60"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/bt_tab2"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/user"
-        android:text="Tab 2" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/bt_tab1"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/heart"
+                android:text="Tab 1" />
 
-    <ImageView
-        android:layout_alignParentRight="true"
-        android:id="@+id/bt_tab3"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/line"
-        android:text="Tab 3" />
+            <ImageView
+                android:id="@+id/bt_tab2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/user"
+                android:text="Tab 2" />
 
 
-</RelativeLayout>
+            <ImageView
+                android:id="@+id/bt_tab3"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/line"
+                android:text="Tab 3" />
+
+
+        </RelativeLayout>
 
     </LinearLayout>
 

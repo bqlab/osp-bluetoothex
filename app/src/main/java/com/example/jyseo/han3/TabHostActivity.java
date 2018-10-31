@@ -1,9 +1,9 @@
 package com.example.jyseo.han3;
 
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +12,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     private final int L2 = 2;
     private final int L3 = 3;
 
+    private FrameLayout fc;
     private ImageView bt_tab1;
     private ImageView bt_tab2;
     private ImageView bt_tab3;
@@ -23,6 +24,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     private TextView f1Hartrate;
     private boolean isConnected;
     private int hartrate;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +72,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         l3 = new Layout3(this);
 
         // 위젯에 대한 참조
+        fc = findViewById(R.id.fragment_container);
         bt_tab1 = (ImageView) findViewById(R.id.bt_tab1);
         bt_tab2 = (ImageView) findViewById(R.id.bt_tab2);
         bt_tab3 = (ImageView) findViewById(R.id.bt_tab3);
@@ -87,14 +90,18 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void callLayout(int layout_no) {
+        fc.removeAllViews();
         switch (layout_no) {
             case 1:
+                fc.addView(l1);
                 break;
 
             case 2:
+                fc.addView(l2);
                 break;
 
             case 3:
+                fc.addView(l3);
                 break;
         }
     }
