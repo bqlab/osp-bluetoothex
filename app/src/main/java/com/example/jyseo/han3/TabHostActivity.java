@@ -66,8 +66,8 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         isConnected = true;
 
         l1 = new Layout1(this);
-        l2 = new Layout2();
-        l3 = new Layout3();
+        l2 = new Layout2(this);
+        l3 = new Layout3(this);
 
         // 위젯에 대한 참조
         bt_tab1 = (ImageView) findViewById(R.id.bt_tab1);

@@ -1,28 +1,25 @@
 package com.example.jyseo.han3;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 
-public class Layout2 extends Fragment {
+public class Layout2 extends FrameLayout {
+    private Context context;
 
-    public Layout2() {
-        // Required empty public constructor
+    public Layout2(Context context) {
+        super(context);
+        init(context);
     }
 
-
-
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.layout_layout2, container, false);
+    public void init(Context context) {
+        this.context = context;
+        LayoutInflater.from(getContext()).inflate(R.layout.layout_layout2, this);
+        this.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
-
-
 }
