@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.net.Inet4Address;
+
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothService;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -95,7 +97,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void init() {
-        new Thread(this).start();
         phone = getIntent().getStringExtra("phone");
 
         l1 = new Layout1(this);
@@ -142,13 +143,14 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         bluetoothSPP.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             @Override
             public void onDataReceived(byte[] data, String message) {
-                TabHostActivity.this.hartrate = Integer.parseInt(message);
+                hartrate = Integer.parseInt(message);
             }
         });
         bluetoothSPP.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
             @Override
             public void onDeviceConnected(String name, String address) {
                 Toast.makeText(TabHostActivity.this, "디바이스와 연결되었습니다.", Toast.LENGTH_SHORT).show();
+                new Thread(TabHostActivity.this).start();
                 isConnected = true;
             }
 
