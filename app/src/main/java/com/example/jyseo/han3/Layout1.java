@@ -24,7 +24,7 @@ public class Layout1 extends FrameLayout {
         f1Hartrate = findViewById(R.id.f1_hartrate);
     }
 
-    public void setHartrate(int hartrate) {
+    public void setHartrate(String hartrate) {
         f1Hartrate.setText(hartrate);
     }
 }
