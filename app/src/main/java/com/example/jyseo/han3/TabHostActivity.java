@@ -185,8 +185,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     public void connectDevice() {
         startActivityForResult(new Intent(getApplicationContext(), DeviceList.class), BluetoothState.REQUEST_CONNECT_DEVICE);
         Toast.makeText(this, "연결할 디바이스를 선택하세요.", Toast.LENGTH_LONG).show();
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phone, null, "디바이스가 40을 초과하거나 140 미만의 심박수를 감지했습니다.", null, null);
     }
 
     public void checkHartrate() {
