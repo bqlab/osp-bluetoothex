@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_SIGNUP = 101;
     public static final int REQUEST_CODE_LOGIN = 102;
 
-    EditText mainInId, mainInPw;
+    EditText mainId, mainPw;
     TextView signupTextview;
     Button loginBtn;
     String id, pw;
@@ -38,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void init() {
         signupTextview = (TextView) findViewById(R.id.signupText);
+        loginBtn = (Button) findViewById(R.id.loginBtn);
+        mainId = findViewById(R.id.main_id);
+        mainPw = findViewById(R.id.main_pw);
+
         signupTextview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,20 +49,36 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE_SIGNUP);
             }
         });
-
-        loginBtn = (Button) findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getSharedPreferences("ids", MODE_PRIVATE).getString("sibal","").equals("")) {}
-                else {
-                    Intent i = new Intent(getApplicationContext(), TabHostActivity.class);
-                    i.putExtra("id", id);
-                    startActivityForResult(i, REQUEST_CODE_LOGIN);
-                }
-
+                checkInputData();
             }
         });
+    }
+
+    public void checkInputData() {
+        id = mainId.getText().toString();
+        pw = mainPw.getText().toString();
+
+        if (id.equals("") || pw.equals("")) {
+            Toast.makeText(this, "빈 칸을 모두 채워야 합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (getSharedPreferences("ids", MODE_PRIVATE).getString(id, "none").equals("none")) {
+            Toast.makeText(this, "해당 아이디가 없습니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!getSharedPreferences("ids", MODE_PRIVATE).getString(id, "none").equals(pw)) {
+            Toast.makeText(this, "비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent i = new Intent(getApplicationContext(), TabHostActivity.class);
+        i.putExtra("id", id);
+        startActivityForResult(i, REQUEST_CODE_LOGIN);
     }
 
     public void requestPermission() {
