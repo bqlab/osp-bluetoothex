@@ -50,7 +50,6 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 checkInputData();
-                finish();
             }
         });
     }
@@ -61,8 +60,7 @@ public class SignupActivity extends AppCompatActivity {
         ph = signupPhone.getText().toString();
         ad = signupAddress.getText().toString();
 
-
-        if (!id.equals("") || !pw.equals("") || !ph.equals("") || !ad.equals("")) {
+        if (id.equals("") || pw.equals("") || ph.equals("") || ad.equals("")) {
             Toast.makeText(this, "빈 칸을 모두 채워야 합니다.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -82,8 +80,12 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
+        Toast.makeText(this,"회원가입이 완료되었습니다.", Toast.LENGTH_LONG).show();
+
         getSharedPreferences("ids", MODE_PRIVATE).edit().putString(id, pw).apply();
         getSharedPreferences("phs", MODE_PRIVATE).edit().putString(id,ph).apply();
         getSharedPreferences("ads", MODE_PRIVATE).edit().putString(id,ad).apply();
+        
+        finish();
     }
 }
