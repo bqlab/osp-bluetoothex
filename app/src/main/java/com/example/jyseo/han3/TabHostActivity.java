@@ -105,7 +105,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         l3 = new Layout3(this);
 
         id = getIntent().getStringExtra("id");
-        nm = "서지영";
+        nm = "서지영"; //이름 바꾸는 부분, 회원가입에 항목이 없어서 이렇게 했습니다.
         ph = getSharedPreferences("phs", MODE_PRIVATE).getString(id, "none");
         ad = getSharedPreferences("ads", MODE_PRIVATE).getString(id, "none");
         l3.setUserData(id, nm, ph, ad);
@@ -197,7 +197,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     public void checkHartrate() {
         l1.setHartrate(Integer.toString(hartrate));
         if ((hartrate < 40 || hartrate > 140) && !isNoticed) {
-            String oneonenine = "01062040454";
+            String oneonenine = "119"; //앱 실행 전에 주의하세요. 일단은 119로 맞추었지만 수정하시길 바랍니다.
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(ph, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
             smsManager.sendTextMessage(oneonenine, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
