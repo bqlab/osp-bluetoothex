@@ -19,7 +19,7 @@ public class SignupActivity extends AppCompatActivity {
     Button signupDone;
     ImageView arrow;
 
-    String id, pw, phone, address;
+    String id, pw, ph, ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,22 +49,26 @@ public class SignupActivity extends AppCompatActivity {
         signupDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent();
-                setResult(RESULT_OK,intent);
+                checkInputData();
                 finish();
             }
         });
-
     }
 
-    private void checkUserData() {
+    private void checkInputData() {
         id = signupId.getText().toString();
         pw = signupPw.getText().toString();
-        phone = signupPhone.getText().toString();
-        address = signupAddress.getText().toString();
+        ph = signupPhone.getText().toString();
+        ad = signupAddress.getText().toString();
 
-        if (!id.equals("") || !pw.equals("") || !phone.equals("") || !address.equals("")) {
+
+        if (!id.equals("") || !pw.equals("") || !ph.equals("") || !ad.equals("")) {
             Toast.makeText(this, "빈 칸을 모두 채워야 합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!getSharedPreferences("ids",MODE_PRIVATE).getString(id, "none").equals("none")) {
+            Toast.makeText(this,"이미 사용중인 아이디입니다.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -73,6 +77,13 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        getSharedPreferences("ids", MODE_PRIVATE).g
+        if (pw.equals("none")) {
+            Toast.makeText(this,"사용할 수 없는 비밀번호입니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        getSharedPreferences("ids", MODE_PRIVATE).edit().putString(id, pw).apply();
+        getSharedPreferences("phs", MODE_PRIVATE).edit().putString(id,ph).apply();
+        getSharedPreferences("ads", MODE_PRIVATE).edit().putString(id,ad).apply();
     }
 }
