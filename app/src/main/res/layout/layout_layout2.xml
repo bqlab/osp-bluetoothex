@@ -1,89 +1,97 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#ffffff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
     tools:context="com.example.jyseo.han3.Layout2">
-
     <!-- TODO: Update blank fragment layout -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:background="#ffffff"
 
-            android:background="#ffffff">
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_marginTop="40dp"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/jogging"/>
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/jogging" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_gravity="center"
                 android:baselineAligned="false"
-                android:layout_gravity="center">
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="300"
+                    android:textColor="#27AE60"
                     android:textSize="50dp"
-                    android:textStyle="bold"
-                    android:textColor="#27AE60"
-                    android:layout_gravity="center"
-                    android:text="300"/>
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:textColor="#27AE60"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="7dp"
-                    android:text="걸음"/>
+                    android:text="걸음"
+                    android:textColor="#27AE60"
+                    android:textSize="20dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_gravity="center"
                 android:baselineAligned="false"
-                android:layout_gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="30dp"
+                android:orientation="horizontal">
 
-                    android:textColor="#27AE60"
-                    android:layout_gravity="center"
-                    android:text="120"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
+                    android:layout_gravity="center"
+
+                    android:text="120"
                     android:textColor="#27AE60"
+                    android:textSize="30dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="7dp"
-                    android:text="kcal 소모"/>
-
+                    android:text="kcal 소모"
+                    android:textColor="#27AE60"
+                    android:textSize="15dp" />
 
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="40dp"
-                android:layout_gravity="center"
-                android:orientation="vertical"
                 android:layout_width="300dp"
                 android:layout_height="69dp"
-                android:background="#2ECC71">
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:background="#2ECC71"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -92,39 +100,40 @@
                         android:textColor="#ffffff"
                         android:textSize="35dp"
                         android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
                         android:text="걸음"
                         android:textColor="#ffffff"
-                        android:textSize="15dp"
-                        />
-
+                        android:textSize="15dp" />
 
 
                 </LinearLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="225dp"
+                    android:layout_marginBottom="5dp"
                     android:text="10.1.오후 3:34"
                     android:textColor="#ffffff"
                     android:textSize="10dp"
-                    android:layout_marginBottom="5dp"
 
                     />
             </LinearLayout>
+
             <ImageView
-                android:layout_marginTop="50dp"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/graph"
                 android:text="Tab 3" />
-    />
+            />
         </LinearLayout>
 
     </ScrollView>
-</FrameLayout>
+</LinearLayout>
 

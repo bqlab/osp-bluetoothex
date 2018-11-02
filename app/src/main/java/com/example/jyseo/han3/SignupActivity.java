@@ -37,12 +37,12 @@ public class SignupActivity extends AppCompatActivity {
         signupAddress = findViewById(R.id.signup_address);
         signupDone = findViewById(R.id.signup_done);
 
-        arrow.setOnClickListener(new View.OnClickListener(){
+        arrow.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent();
-                setResult(RESULT_OK,intent);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -65,27 +65,27 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        if (!getSharedPreferences("ids",MODE_PRIVATE).getString(id, "none").equals("none")) {
-            Toast.makeText(this,"이미 사용중인 아이디입니다.", Toast.LENGTH_SHORT).show();
+        if (!getSharedPreferences("ids", MODE_PRIVATE).getString(id, "none").equals("none")) {
+            Toast.makeText(this, "이미 사용중인 아이디입니다.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (!pw.equals(signupRpw.getText().toString())) {
-            Toast.makeText(this,"비밀번호를 다시 확인하세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "비밀번호를 다시 확인하세요.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (pw.equals("none")) {
-            Toast.makeText(this,"사용할 수 없는 비밀번호입니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "사용할 수 없는 비밀번호입니다.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Toast.makeText(this,"회원가입이 완료되었습니다.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "회원가입이 완료되었습니다.", Toast.LENGTH_LONG).show();
 
         getSharedPreferences("ids", MODE_PRIVATE).edit().putString(id, pw).apply();
-        getSharedPreferences("phs", MODE_PRIVATE).edit().putString(id,ph).apply();
-        getSharedPreferences("ads", MODE_PRIVATE).edit().putString(id,ad).apply();
-        
+        getSharedPreferences("phs", MODE_PRIVATE).edit().putString(id, ph).apply();
+        getSharedPreferences("ads", MODE_PRIVATE).edit().putString(id, ad).apply();
+
         finish();
     }
 }

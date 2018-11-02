@@ -49,7 +49,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     private BluetoothSPP bluetoothSPP;
 
     public int hartrate;
-    public String phone;
+    public String id, nm, ph, ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,8 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        if (!isConnected)
+            connectDevice();
         switch (v.getId()) {
             case R.id.bt_tab1:
                 // '버튼1' 클릭 시 '프래그먼트1' 호출
@@ -97,11 +99,15 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void init() {
-        phone = getIntent().getStringExtra("phone");
-
         l1 = new Layout1(this);
         l2 = new Layout2(this);
         l3 = new Layout3(this);
+
+        id = getIntent().getStringExtra("id");
+        nm = "서지영";
+        ph = getSharedPreferences("phs", MODE_PRIVATE).getString(id, "none");
+        ad = getSharedPreferences("ads", MODE_PRIVATE).getString(id, "none");
+        l3.setUserData(id, nm, ph, ad);
 
         // 위젯에 대한 참조
         fc = findViewById(R.id.fragment_container);
@@ -115,7 +121,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         bt_tab3.setOnClickListener(this);
 
         // 임의로 액티비티 호출 시점에 어느 프레그먼트를 프레임레이아웃에 띄울 것인지를 정함
-        callLayout(L2);
+        callLayout(L1);
     }
 
     private void callLayout(int layout_no) {
@@ -190,8 +196,10 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     public void checkHartrate() {
         l1.setHartrate(Integer.toString(hartrate));
         if ((hartrate < 40 || hartrate > 140) && !isNoticed) {
+            String oneonenine = "01062040454";
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phone, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
+            smsManager.sendTextMessage(ph, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
+            smsManager.sendTextMessage(oneonenine, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
             isNoticed = true;
         } else if (!(hartrate < 40 || hartrate > 140) && isNoticed)
             isNoticed = false;
