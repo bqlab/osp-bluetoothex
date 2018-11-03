@@ -49,7 +49,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     private boolean isConnected = false;
     private BluetoothSPP bluetoothSPP;
 
-    public int hartrate;
+    public int hartrate = 80;
     public String id, nm, ph, ad;
 
     @Override
@@ -59,6 +59,12 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         init();
         setBluetoothSPP();
         connectBluetooth();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isConnected = false;
     }
 
     @Override
@@ -183,10 +189,9 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
             bluetoothSPP.setupService();
             bluetoothSPP.startService(BluetoothState.DEVICE_OTHER); //안드로이드 기기가 아닌 아두이노 같은 장치도 연결이 가능하게 서비스 설정
             connectDevice();
-        } else if (!isConnected)
+        } else if (!isConnected) {
             connectDevice();
-        if (bluetoothSPP.getServiceState() == BluetoothState.STATE_CONNECTED)
-            bluetoothSPP.disconnect();
+        }
     }
 
     public void connectDevice() {
@@ -196,13 +201,14 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
 
     public void checkHartrate() {
         l1.setHartrate(Integer.toString(hartrate));
+        Toast.makeText(this, "sex", Toast.LENGTH_SHORT).show(); //
         if ((hartrate < 40 || hartrate > 140) && !isNoticed) {
-            String oneonenine = "119"; //앱 실행 전에 주의하세요. 일단은 119로 맞추었지만 수정하시길 바랍니다.
+            String oneonenine = "01062040454"; //앱 실행 전에 주의하세요. 일단은 119로 맞추었지만 수정하시길 바랍니다.
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(ph, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
             smsManager.sendTextMessage(oneonenine, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
-            startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:"+oneonenine)));
-            startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:"+ph)));
+            startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + oneonenine)));
+            startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + ph)));
             isNoticed = true;
         } else if (!(hartrate < 40 || hartrate > 140) && isNoticed)
             isNoticed = false;
