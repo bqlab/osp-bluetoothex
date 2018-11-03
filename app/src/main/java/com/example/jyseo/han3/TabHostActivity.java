@@ -190,7 +190,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
             bluetoothSPP.startService(BluetoothState.DEVICE_OTHER); //안드로이드 기기가 아닌 아두이노 같은 장치도 연결이 가능하게 서비스 설정
             connectDevice();
         } else if (!isConnected) {
-            connectDevice();
+            connectDevice(); //디바이스 연결이 안 되었으면 연결시도
         }
     }
 
@@ -201,9 +201,8 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
 
     public void checkHartrate() {
         l1.setHartrate(Integer.toString(hartrate));
-        Toast.makeText(this, "sex", Toast.LENGTH_SHORT).show(); //
         if ((hartrate < 40 || hartrate > 140) && !isNoticed) {
-            String oneonenine = "01062040454"; //앱 실행 전에 주의하세요. 일단은 119로 맞추었지만 수정하시길 바랍니다.
+            String oneonenine = "000"; //이 부분 119로 바꾸시면 돼요
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(ph, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
             smsManager.sendTextMessage(oneonenine, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
