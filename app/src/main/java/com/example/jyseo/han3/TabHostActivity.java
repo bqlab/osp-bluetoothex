@@ -1,33 +1,18 @@
 package com.example.jyseo.han3;
 
-import android.Manifest;
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.net.Inet4Address;
-
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
-import app.akexorcist.bluetotohspp.library.BluetoothService;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
@@ -106,6 +91,8 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void init() {
+        new BluetoothConnector(this);
+
         l1 = new Layout1(this);
         l2 = new Layout2(this);
         l3 = new Layout3(this);
@@ -182,15 +169,20 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void connectBluetooth() {
-        if (!bluetoothSPP.isBluetoothEnabled()) {//핸드폰에서 블루투스가 꺼져 있다면
-            Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(i, BluetoothState.REQUEST_ENABLE_BT);
-        } else if (!bluetoothSPP.isServiceAvailable()) {
-            bluetoothSPP.setupService();
-            bluetoothSPP.startService(BluetoothState.DEVICE_OTHER); //안드로이드 기기가 아닌 아두이노 같은 장치도 연결이 가능하게 서비스 설정
-            connectDevice();
-        } else if (!isConnected) {
-            connectDevice(); //디바이스 연결이 안 되었으면 연결시도
+        try {
+            if (!bluetoothSPP.isBluetoothEnabled()) {//핸드폰에서 블루투스가 꺼져 있다면
+                Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(i, BluetoothState.REQUEST_ENABLE_BT);
+            } else if (!bluetoothSPP.isServiceAvailable()) {
+                bluetoothSPP.setupService();
+                bluetoothSPP.startService(BluetoothState.DEVICE_OTHER); //안드로이드 기기가 아닌 아두이노 같은 장치도 연결이 가능하게 서비스 설정
+                connectDevice();
+            } else if (!isConnected) {
+                connectDevice(); //디바이스 연결이 안 되었으면 연결시도
+            }
+        } catch (Exception e){
+            Toast.makeText(this, "알 수 없는 에러가 발생했습니다.", Toast.LENGTH_LONG).show();
+            finishAffinity();
         }
     }
 

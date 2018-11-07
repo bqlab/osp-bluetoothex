@@ -25,5 +25,6 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".SignupActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+        <service android:name=".BluetoothConnector"/>
     </application>
 </manifest>
