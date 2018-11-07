@@ -41,17 +41,12 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     private BluetoothSPP bluetoothSPP;
 
     public int hart = 80;
-    public String id, nm, ph, ad;
-
-    NotificationManager notificationManager;
-    NotificationChannel notificationChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tap_host);
         init();
-        checkAndroidVersion();
         setBluetoothSPP();
         connectBluetooth();
     }
@@ -91,7 +86,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void run() {
                         checkHartrate();
-                        makeNotification("잘작동하나");
                     }
                 });
             } catch (InterruptedException e) {
@@ -106,15 +100,15 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
 
         bluetoothSPP = new BluetoothSPP(this);
 
+        NotifyService.id = getIntent().getStringExtra("id");
+        NotifyService.nm = "서지영"; //이름 바꾸는 부분, 회원가입에 항목이 없어서 이렇게 했습니다.
+        NotifyService.ph = getSharedPreferences("phs", MODE_PRIVATE).getString(NotifyService.id, "none");
+        NotifyService.ad = getSharedPreferences("ads", MODE_PRIVATE).getString(NotifyService.id, "none");
+        l3.setUserData(NotifyService.id, NotifyService.nm, NotifyService.ph, NotifyService.ad);
+
         l1 = new Layout1(this);
         l2 = new Layout2(this);
         l3 = new Layout3(this);
-
-        id = getIntent().getStringExtra("id");
-        nm = "서지영"; //이름 바꾸는 부분, 회원가입에 항목이 없어서 이렇게 했습니다.
-        ph = getSharedPreferences("phs", MODE_PRIVATE).getString(id, "none");
-        ad = getSharedPreferences("ads", MODE_PRIVATE).getString(id, "none");
-        l3.setUserData(id, nm, ph, ad);
 
         // 위젯에 대한 참조
         fc = findViewById(R.id.fragment_container);
@@ -200,29 +194,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
 
     public void checkHartrate() {
         l1.setHartrate(Integer.toString(hart));
-        if ((hart < 40 || hart > 140) && !isNoticed) {
-            String oneonenine = "000"; //이 부분 119로 바꾸시면 돼요
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(ph, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
-            smsManager.sendTextMessage(oneonenine, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
-            startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + oneonenine)));
-            startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + ph)));
-            isNoticed = true;
-        } else if (!(hart < 40 || hart > 140) && isNoticed)
-            isNoticed = false;
-    }
 
-    public void checkAndroidVersion() {
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = new NotificationChannel("em", "긴급알림", NotificationManager.IMPORTANCE_DEFAULT);
-            notificationChannel.setDescription("긴급한 상황을 알립니다.");
-            notificationChannel.enableLights(true);
-            notificationChannel.enableVibration(true);
-            notificationChannel.setVibrationPattern(new long[]{100, 200, 100, 200});
-            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }//안드로이드 8.0 이상일 경우에는 이렇게 노티피케이션 채널을 만들어야 함
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -240,28 +212,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(this, "블루투스가 비활성화되어 있습니다.", Toast.LENGTH_LONG).show();
                 finish();
             }
-        }
-    }
-
-    public void makeNotification(String content) { //알림을 만드는 함수
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.notify(0, new NotificationCompat.Builder(this, "em")
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle(content)
-                    .setWhen(System.currentTimeMillis())
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setAutoCancel(true)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .build());
-        } else {
-            notificationManager.notify(0, new Notification.Builder(this)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle(content)
-                    .setWhen(System.currentTimeMillis())
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setAutoCancel(true)
-                    .setPriority(Notification.PRIORITY_HIGH)
-                    .build());
         }
     }
 }
