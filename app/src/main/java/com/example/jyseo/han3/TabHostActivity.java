@@ -1,33 +1,24 @@
 package com.example.jyseo.han3;
 
-import android.Manifest;
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.net.Inet4Address;
-
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
-import app.akexorcist.bluetotohspp.library.BluetoothService;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
@@ -49,14 +40,18 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     private boolean isConnected = false;
     private BluetoothSPP bluetoothSPP;
 
-    public int hartrate = 80;
+    public int hart = 80;
     public String id, nm, ph, ad;
+
+    NotificationManager notificationManager;
+    NotificationChannel notificationChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tap_host);
         init();
+        checkAndroidVersion();
         setBluetoothSPP();
         connectBluetooth();
     }
@@ -64,7 +59,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        isConnected = false;
     }
 
     @Override
@@ -97,6 +91,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void run() {
                         checkHartrate();
+                        makeNotification("잘작동하나");
                     }
                 });
             } catch (InterruptedException e) {
@@ -106,6 +101,11 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void init() {
+        isConnected = true;
+        new Thread(this).start();
+
+        bluetoothSPP = new BluetoothSPP(this);
+
         l1 = new Layout1(this);
         l2 = new Layout2(this);
         l3 = new Layout3(this);
@@ -148,7 +148,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void setBluetoothSPP() {
-        bluetoothSPP = new BluetoothSPP(this);
         if (!bluetoothSPP.isBluetoothAvailable()) {
             Toast.makeText(this, "블루투스를 사용할 수 없습니다.", Toast.LENGTH_LONG).show();
             finish();
@@ -156,7 +155,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         bluetoothSPP.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             @Override
             public void onDataReceived(byte[] data, String message) {
-                hartrate = Integer.parseInt(message);
+                hart = Integer.parseInt(message);
             }
         });
         bluetoothSPP.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
@@ -200,8 +199,8 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void checkHartrate() {
-        l1.setHartrate(Integer.toString(hartrate));
-        if ((hartrate < 40 || hartrate > 140) && !isNoticed) {
+        l1.setHartrate(Integer.toString(hart));
+        if ((hart < 40 || hart > 140) && !isNoticed) {
             String oneonenine = "000"; //이 부분 119로 바꾸시면 돼요
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(ph, null, "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.", null, null);
@@ -209,8 +208,21 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
             startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + oneonenine)));
             startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + ph)));
             isNoticed = true;
-        } else if (!(hartrate < 40 || hartrate > 140) && isNoticed)
+        } else if (!(hart < 40 || hart > 140) && isNoticed)
             isNoticed = false;
+    }
+
+    public void checkAndroidVersion() {
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel = new NotificationChannel("em", "긴급알림", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.setDescription("긴급한 상황을 알립니다.");
+            notificationChannel.enableLights(true);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setVibrationPattern(new long[]{100, 200, 100, 200});
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }//안드로이드 8.0 이상일 경우에는 이렇게 노티피케이션 채널을 만들어야 함
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -228,6 +240,28 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(this, "블루투스가 비활성화되어 있습니다.", Toast.LENGTH_LONG).show();
                 finish();
             }
+        }
+    }
+
+    public void makeNotification(String content) { //알림을 만드는 함수
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationManager.notify(0, new NotificationCompat.Builder(this, "em")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(content)
+                    .setWhen(System.currentTimeMillis())
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setAutoCancel(true)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .build());
+        } else {
+            notificationManager.notify(0, new Notification.Builder(this)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(content)
+                    .setWhen(System.currentTimeMillis())
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setAutoCancel(true)
+                    .setPriority(Notification.PRIORITY_HIGH)
+                    .build());
         }
     }
 }
