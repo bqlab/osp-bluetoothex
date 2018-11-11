@@ -1,22 +1,35 @@
 package com.example.jyseo.han3;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.TimePickerDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.text.DataFormat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -101,7 +114,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         bluetoothSPP = new BluetoothSPP(this);
 
         l1 = new Layout1(this);
-        l2 = new Layout2(this);
+        l2 = new Layout2(this, this);
         l3 = new Layout3(this);
 
         NotifyService.id = getIntent().getStringExtra("id");
@@ -194,7 +207,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
 
     public void checkHartrate() {
         l1.setHartrate(Integer.toString(hart));
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

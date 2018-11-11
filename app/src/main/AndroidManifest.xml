@@ -30,6 +30,5 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <service android:name=".NotifyService"/>
         <service android:name=".AlarmService"/>
-        <receiver android:name=".AlarmReceiver"/>
     </application>
 </manifest>
