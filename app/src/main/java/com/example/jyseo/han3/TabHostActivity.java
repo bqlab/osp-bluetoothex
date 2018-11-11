@@ -112,16 +112,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
 
         bluetoothSPP = new BluetoothSPP(this);
 
-        l1 = new Layout1(this);
-        l2 = new Layout2(this, this);
-        l3 = new Layout3(this);
-
-        NotifyService.id = getIntent().getStringExtra("id");
-        NotifyService.nm = "서지영"; //이름 바꾸는 부분, 회원가입에 항목이 없어서 이렇게 했습니다.
-        NotifyService.ph = getSharedPreferences("phs", MODE_PRIVATE).getString(NotifyService.id, "none");
-        NotifyService.ad = getSharedPreferences("ads", MODE_PRIVATE).getString(NotifyService.id, "none");
-        l3.setUserData(NotifyService.id, NotifyService.nm, NotifyService.ph, NotifyService.ad);
-
         // 위젯에 대한 참조
         fc = findViewById(R.id.fragment_container);
         bt_tab1 = (ImageView) findViewById(R.id.bt_tab1);
@@ -134,6 +124,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         bt_tab3.setOnClickListener(this);
 
         // 임의로 액티비티 호출 시점에 어느 프레그먼트를 프레임레이아웃에 띄울 것인지를 정함
+        l1 = new Layout1(this);
         callLayout(L1);
     }
 
@@ -144,11 +135,19 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
                 fc.addView(l1);
                 break;
             case 2:
+                l2 = new Layout2(this);
+                l2.setActivity(this);
                 fc.addView(l2);
                 break;
 
             case 3:
+                l3 = new Layout3(this);
                 fc.addView(l3);
+                NotifyService.id = getIntent().getStringExtra("id");
+                NotifyService.nm = "서지영"; //이름 바꾸는 부분, 회원가입에 항목이 없어서 이렇게 했습니다.
+                NotifyService.ph = getSharedPreferences("phs", MODE_PRIVATE).getString(NotifyService.id, "none");
+                NotifyService.ad = getSharedPreferences("ads", MODE_PRIVATE).getString(NotifyService.id, "none");
+                l3.setUserData(NotifyService.id, NotifyService.nm, NotifyService.ph, NotifyService.ad);
                 break;
         }
     }

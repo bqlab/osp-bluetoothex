@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +33,7 @@ public class Layout2 extends LinearLayout implements TimePickerDialog.OnTimeSetL
 
     public Layout2(Context context) {
         super(context);
-    }
-
-    public Layout2(Context context, Activity activity) {
-        super(context);
-        init(context, activity);
+        init();
     }
 
     @Override
@@ -50,9 +47,9 @@ public class Layout2 extends LinearLayout implements TimePickerDialog.OnTimeSetL
         startAlarm(c);
     }
 
-    public void init(Context context, Activity activity) {
-        this.context = context;
-        this.activity = activity;
+    public void init() {
+        LayoutInflater.from(getContext()).inflate(R.layout.layout_layout2, this);
+        this.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         layout2Title = findViewById(R.id.layout2_title);
         layout2Time = findViewById(R.id.layout2_time);
@@ -65,9 +62,10 @@ public class Layout2 extends LinearLayout implements TimePickerDialog.OnTimeSetL
                 timePicker.show(Layout2.this.activity.getFragmentManager(), "타임피커");
             }
         });
+    }
 
-        LayoutInflater.from(getContext()).inflate(R.layout.layout_layout2, this);
-        this.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
     public void updateTimeText(Calendar c) {
