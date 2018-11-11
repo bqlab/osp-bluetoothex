@@ -2,9 +2,12 @@ package com.example.jyseo.han3;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -69,12 +72,22 @@ public class Layout2 extends LinearLayout implements TimePickerDialog.OnTimeSetL
 
     public void updateTimeText(Calendar c) {
         String s = "알람이 설정되었습니다. -> ";
-        s += SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT).format(c);
+        s += SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT).format(c.getTime());
         layout2Title.setText(s);
     }
 
     public void startAlarm(Calendar c) {
         AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(activity, AlarmReceiver.class);
+        PendingIntent p = PendingIntent.getBroadcast(activity, 1, i, 0);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), p);
     }
 
+    public void canceAlarm () {
+        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(activity, AlarmReceiver.class);
+        PendingIntent p = PendingIntent.getBroadcast(activity, 1, i, 0);
+        alarmManager.cancel(p);
+        layout2Title.setText("알람이 취소되었습니다.");
+    }
 }

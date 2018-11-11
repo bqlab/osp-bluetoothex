@@ -38,9 +38,9 @@ class NotificationHelper extends ContextWrapper {
         return notificationManager;
     }
 
-    public NotificationCompat.Builder makeNotification(String title, String message) {
+    public NotificationCompat.Builder getChannelNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), chanelID)
-                .setContentTitle(title)
-                .setContentText(message);
+                .setContentTitle("알람")
+                .setContentText("약을 복용할 시간입니다.");
     }
 }

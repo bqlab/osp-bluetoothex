@@ -4,10 +4,13 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        
+        NotificationHelper notificationHelper = new NotificationHelper(context);
+        NotificationCompat.Builder b = notificationHelper.getChannelNotification();
+        notificationHelper.getNotificationManager().notify(1, b.build());
     }
 }
