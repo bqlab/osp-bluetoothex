@@ -87,7 +87,8 @@ public class NotifyService extends Service {
             if (flag.equals("hart")) {
                 hart = data;
                 if ((hart < 40 || hart > 140) && !isNoticed) {
-                    emergencyNotification("디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다.");
+                    String s = "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다. 사용자의 주소는 " + ad + "입니다.";
+                    emergencyNotify(s);
                     isNoticed = true;
                 } else if (!(hart < 40 || hart > 140) && isNoticed)
                     isNoticed = false;
@@ -95,7 +96,8 @@ public class NotifyService extends Service {
                 if (buzz && !isBuzzed) {
                     buzz = false;
                     isBuzzed = true;
-                    emergencyNotification("디바이스의 부저 버튼이 눌렸습니다.");
+                    String s = "디바이스의 부저 버튼이 눌렸습니다. 사용자의 주소는 " + ad + "입니다.";
+                    emergencyNotify(s);
                 }
                 if (!buzz && isBuzzed)
                     isBuzzed = false;
@@ -116,7 +118,7 @@ public class NotifyService extends Service {
         }//안드로이드 8.0 이상일 경우에는 이렇게 노티피케이션 채널을 만들어야 함
     }
 
-    public void emergencyNotification(String content) { //알림을 만드는 함수
+    public void emergencyNotify(String content) { //알림을 만드는 함수
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationManager.notify(0, new NotificationCompat.Builder(this, "em")
                     .setSmallIcon(R.mipmap.ic_launcher)
