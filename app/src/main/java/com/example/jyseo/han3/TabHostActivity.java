@@ -100,15 +100,15 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
 
         bluetoothSPP = new BluetoothSPP(this);
 
+        l1 = new Layout1(this);
+        l2 = new Layout2(this);
+        l3 = new Layout3(this);
+
         NotifyService.id = getIntent().getStringExtra("id");
         NotifyService.nm = "서지영"; //이름 바꾸는 부분, 회원가입에 항목이 없어서 이렇게 했습니다.
         NotifyService.ph = getSharedPreferences("phs", MODE_PRIVATE).getString(NotifyService.id, "none");
         NotifyService.ad = getSharedPreferences("ads", MODE_PRIVATE).getString(NotifyService.id, "none");
         l3.setUserData(NotifyService.id, NotifyService.nm, NotifyService.ph, NotifyService.ad);
-
-        l1 = new Layout1(this);
-        l2 = new Layout2(this);
-        l3 = new Layout3(this);
 
         // 위젯에 대한 참조
         fc = findViewById(R.id.fragment_container);
