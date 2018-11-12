@@ -35,7 +35,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
-public class TabHostActivity extends AppCompatActivity implements View.OnClickListener, Runnable {
+public class TabHostActivity extends AppCompatActivity implements View.OnClickListener, Runnable, TimePickerDialog.OnTimeSetListener {
     private final int L1 = 1;
     private final int L2 = 2;
     private final int L3 = 3;
@@ -107,47 +107,75 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, i);
+        c.set(Calendar.MINUTE, i1);
+        c.set(Calendar.SECOND, 0);
+
+        l2.updateTimeText(c);
+        l2.startAlarm(c);
+    }
+
     public void init() {
         isConnected = true;
         new Thread(this).start();
 
         bluetoothSPP = new BluetoothSPP(this);
 
-        // 위젯에 대한 참조
         fc = findViewById(R.id.fragment_container);
+
         bt_tab1 = (ImageView) findViewById(R.id.bt_tab1);
         bt_tab2 = (ImageView) findViewById(R.id.bt_tab2);
         bt_tab3 = (ImageView) findViewById(R.id.bt_tab3);
 
-        // 탭 버튼에 대한 리스너 연결
         bt_tab1.setOnClickListener(this);
         bt_tab2.setOnClickListener(this);
         bt_tab3.setOnClickListener(this);
 
-        // 임의로 액티비티 호출 시점에 어느 프레그먼트를 프레임레이아웃에 띄울 것인지를 정함
         l1 = new Layout1(this);
+        l2 = new Layout2(this);
+        l3 = new Layout3(this);
+
+        fc.addView(l1);
+        fc.addView(l2);
+        fc.addView(l3);
         callLayout(L1);
+
+        l2.setActivity(this);
+        l2.layout2Time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.support.v4.app.DialogFragment timePicker = new AlarmTimePicker();
+                timePicker.show(getSupportFragmentManager(), "타임피커");
+            }
+        });
+
+        NotifyService.id = getIntent().getStringExtra("id");
+        NotifyService.nm = "서지영"; //이름 바꾸는 부분, 회원가입에 항목이 없어서 이렇게 했습니다.
+        NotifyService.ph = getSharedPreferences("phs", MODE_PRIVATE).getString(NotifyService.id, "none");
+        NotifyService.ad = getSharedPreferences("ads", MODE_PRIVATE).getString(NotifyService.id, "none");
+        l3.setUserData(NotifyService.id, NotifyService.nm, NotifyService.ph, NotifyService.ad);
     }
 
     private void callLayout(int layout_no) {
-        fc.removeAllViews();
         switch (layout_no) {
             case 1:
-                fc.addView(l1);
+                l1.setVisibility(View.VISIBLE);
+                l2.setVisibility(View.GONE);
+                l3.setVisibility(View.GONE);
                 break;
             case 2:
-                l2 = new Layout2(this);
-                l2.setActivity(this);
-                fc.addView(l2);
+                l1.setVisibility(View.GONE);
+                l2.setVisibility(View.VISIBLE);
+                l3.setVisibility(View.GONE);
                 break;
             case 3:
-                l3 = new Layout3(this);
-                fc.addView(l3);
-                NotifyService.id = getIntent().getStringExtra("id");
-                NotifyService.nm = "서지영"; //이름 바꾸는 부분, 회원가입에 항목이 없어서 이렇게 했습니다.
-                NotifyService.ph = getSharedPreferences("phs", MODE_PRIVATE).getString(NotifyService.id, "none");
-                NotifyService.ad = getSharedPreferences("ads", MODE_PRIVATE).getString(NotifyService.id, "none");
-                l3.setUserData(NotifyService.id, NotifyService.nm, NotifyService.ph, NotifyService.ad);
+                l1.setVisibility(View.GONE);
+                l2.setVisibility(View.GONE);
+                l3.setVisibility(View.VISIBLE);
                 break;
         }
     }

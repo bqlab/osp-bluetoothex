@@ -25,27 +25,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
-public class Layout2 extends LinearLayout implements TimePickerDialog.OnTimeSetListener {
+public class Layout2 extends LinearLayout {
     Context context;
-    FragmentActivity activity;
+    Activity activity;
 
-    TextView layout2Title;
-    Button layout2Time, layout2Week;
+    public TextView layout2Title;
+    public Button layout2Time, layout2Week;
 
     public Layout2(Context context) {
         super(context);
         init();
-    }
-
-    @Override
-    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, i);
-        c.set(Calendar.MINUTE, i1);
-        c.set(Calendar.SECOND, 0);
-
-        updateTimeText(c);
-        startAlarm(c);
     }
 
     public void init() {
@@ -55,14 +44,6 @@ public class Layout2 extends LinearLayout implements TimePickerDialog.OnTimeSetL
         layout2Title = findViewById(R.id.layout2_title);
         layout2Time = findViewById(R.id.layout2_time);
         layout2Week = findViewById(R.id.layout2_week);
-
-        layout2Time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment timePicker = new AlarmTimePicker();
-                timePicker.show(Layout2.this.activity.getSupportFragmentManager(), "타임피커");
-            }
-        });
     }
 
     public void setActivity(FragmentActivity activity) {
