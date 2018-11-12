@@ -1,6 +1,7 @@
 package com.example.jyseo.han3;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -8,6 +9,7 @@ import android.app.NotificationManager;
 import android.app.TimePickerDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.net.Uri;
@@ -150,6 +152,21 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View v) {
                 android.support.v4.app.DialogFragment timePicker = new AlarmTimePicker();
                 timePicker.show(getSupportFragmentManager(), "타임피커");
+            }
+        });
+        l2.layout2Week.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WeekLayout w = new WeekLayout(TabHostActivity.this);
+                new AlertDialog.Builder(TabHostActivity.this)
+                        .setTitle("알람을 활성화 할 요일을 선택하세요.")
+                        .setView(w)
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
             }
         });
 
