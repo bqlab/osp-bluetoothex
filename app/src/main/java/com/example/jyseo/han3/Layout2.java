@@ -26,9 +26,7 @@ import java.util.Calendar;
 
 
 public class Layout2 extends LinearLayout {
-    Context context;
     Activity activity;
-
     public TextView layout2Title;
     public Button layout2Time, layout2Week;
 

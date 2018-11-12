@@ -124,13 +124,9 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void init() {
-        isConnected = true;
-        new Thread(this).start();
-
         bluetoothSPP = new BluetoothSPP(this);
 
         fc = findViewById(R.id.fragment_container);
-
         bt_tab1 = (ImageView) findViewById(R.id.bt_tab1);
         bt_tab2 = (ImageView) findViewById(R.id.bt_tab2);
         bt_tab3 = (ImageView) findViewById(R.id.bt_tab3);
