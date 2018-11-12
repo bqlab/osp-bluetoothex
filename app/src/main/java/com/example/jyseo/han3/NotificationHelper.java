@@ -40,6 +40,7 @@ class NotificationHelper extends ContextWrapper {
     public NotificationCompat.Builder getChannelNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), chanelID)
                 .setContentTitle("알람")
-                .setContentText("약을 복용할 시간입니다.");
+                .setContentText("약을 복용할 시간입니다.")
+                .setSmallIcon(R.mipmap.ic_launcher_round);
     }
 }
