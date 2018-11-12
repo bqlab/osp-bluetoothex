@@ -3,13 +3,14 @@ package com.example.jyseo.han3;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
+import android.support.v4.app.DialogFragment;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,7 @@ import java.util.Calendar;
 
 public class Layout2 extends LinearLayout implements TimePickerDialog.OnTimeSetListener {
     Context context;
-    Activity activity;
+    FragmentActivity activity;
 
     TextView layout2Title;
     Button layout2Time, layout2Week;
@@ -59,12 +60,12 @@ public class Layout2 extends LinearLayout implements TimePickerDialog.OnTimeSetL
             @Override
             public void onClick(View view) {
                 DialogFragment timePicker = new AlarmTimePicker();
-                timePicker.show(Layout2.this.activity.getFragmentManager(), "타임피커");
+                timePicker.show(Layout2.this.activity.getSupportFragmentManager(), "타임피커");
             }
         });
     }
 
-    public void setActivity(Activity activity) {
+    public void setActivity(FragmentActivity activity) {
         this.activity = activity;
     }
 
@@ -78,6 +79,7 @@ public class Layout2 extends LinearLayout implements TimePickerDialog.OnTimeSetL
         AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(activity, AlarmReceiver.class);
         PendingIntent p = PendingIntent.getBroadcast(activity, 1, i, 0);
+        assert alarmManager != null;
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), p);
     }
 
@@ -85,6 +87,7 @@ public class Layout2 extends LinearLayout implements TimePickerDialog.OnTimeSetL
         AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(activity, AlarmReceiver.class);
         PendingIntent p = PendingIntent.getBroadcast(activity, 1, i, 0);
+        assert alarmManager != null;
         alarmManager.cancel(p);
         layout2Title.setText("알람이 취소되었습니다.");
     }

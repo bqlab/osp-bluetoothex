@@ -13,6 +13,7 @@ import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -139,7 +140,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
                 l2.setActivity(this);
                 fc.addView(l2);
                 break;
-
             case 3:
                 l3 = new Layout3(this);
                 fc.addView(l3);
