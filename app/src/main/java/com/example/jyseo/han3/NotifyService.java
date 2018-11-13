@@ -68,7 +68,7 @@ public class NotifyService extends Service implements Runnable {
     public void run() {
         while (isConnected) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(200);
                 checkData();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -78,17 +78,19 @@ public class NotifyService extends Service implements Runnable {
 
     public void checkData() {
         if (data == 254) {
+            data = 0;
             String s = "디바이스의 부저 버튼이 눌렸습니다. 사용자의 주소는 " + ad + "입니다.";
             emergencyNotify(s);
         } else {
-            if (data != 0)
-                hart = data;
-            if ((hart < 40 || hart > 140) && !isNoticed) {
-                String s = "디바이스가 40을 초과하거나 140 미만의 심박수를 감지했습니다. 사용자의 주소는 " + ad + "입니다.";
-                emergencyNotify(s);
-                isNoticed = true;
-            } else if (!(hart < 40 || hart > 140) && isNoticed)
-                isNoticed = false;
+            hart = data;
+            if (hart != 0) {
+                if ((hart < 40 || hart > 140) && !isNoticed) {
+                    String s = "디바이스가 40을 초과하거나 140 미만의 심박수를 감지했습니다. 사용자의 주소는 " + ad + "입니다.";
+                    emergencyNotify(s);
+                    isNoticed = true;
+                } else if (!(hart < 40 || hart > 140) && isNoticed)
+                    isNoticed = false;
+            }
         }
     }
 
@@ -109,7 +111,8 @@ public class NotifyService extends Service implements Runnable {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationManager.notify(0, new NotificationCompat.Builder(this, "em")
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle(content)
+                    .setContentTitle("알림")
+                    .setContentText(content)
                     .setWhen(System.currentTimeMillis())
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
@@ -118,7 +121,8 @@ public class NotifyService extends Service implements Runnable {
         } else {
             notificationManager.notify(0, new Notification.Builder(this)
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle(content)
+                    .setContentTitle("알림")
+                    .setContentText(content)
                     .setWhen(System.currentTimeMillis())
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
