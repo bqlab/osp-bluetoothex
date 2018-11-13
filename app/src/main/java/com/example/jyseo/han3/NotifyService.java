@@ -9,20 +9,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Debug;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
+import android.util.Log;
 
 import static com.example.jyseo.han3.App.CHANNEL_ID;
 
-public class NotifyService extends Service {
+public class NotifyService extends Service implements Runnable {
 
-    public static int data = 0, hart = 0;
-    public static String flag = "hart";
-
-    public static boolean buzz = false;
-    public static boolean isBuzzed = false;
+    public static int data, hart;
     public static boolean isNoticed = false;
     public static boolean isConnected = false;
 
@@ -61,47 +59,36 @@ public class NotifyService extends Service {
         startForeground(1, notification);
         //알림서비스를 이용하기 위한 기본세팅
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (isConnected) {
-                        Thread.sleep(1000); //1초에 한번씩 반복하게 만듦
-                        checkData();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
+        new Thread(this).start();
         return START_NOT_STICKY;
     }
 
-    public void checkData() {
-        if (data == 255)
-            flag = "hart";
-        else if (data == 254)
-            flag = "buzz";
-        else {
-            if (flag.equals("hart")) {
-                hart = data;
-                if ((hart < 40 || hart > 140) && !isNoticed) {
-                    String s = "디바이스가 40을 초과하거나 140 마만의 심박수를 감지했습니다. 사용자의 주소는 " + ad + "입니다.";
-                    emergencyNotify(s);
-                    isNoticed = true;
-                } else if (!(hart < 40 || hart > 140) && isNoticed)
-                    isNoticed = false;
-            } else if (flag.equals("buzz")) {
-                if (buzz && !isBuzzed) {
-                    buzz = false;
-                    isBuzzed = true;
-                    String s = "디바이스의 부저 버튼이 눌렸습니다. 사용자의 주소는 " + ad + "입니다.";
-                    emergencyNotify(s);
-                }
-                if (!buzz && isBuzzed)
-                    isBuzzed = false;
+
+    @Override
+    public void run() {
+        while (isConnected) {
+            try {
+                Thread.sleep(1000);
+                checkData();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        }
+    }
+
+    public void checkData() {
+        if (data == 254) {
+            String s = "디바이스의 부저 버튼이 눌렸습니다. 사용자의 주소는 " + ad + "입니다.";
+            emergencyNotify(s);
+        } else {
+            if (data != 0)
+                hart = data;
+            if ((hart < 40 || hart > 140) && !isNoticed) {
+                String s = "디바이스가 40을 초과하거나 140 미만의 심박수를 감지했습니다. 사용자의 주소는 " + ad + "입니다.";
+                emergencyNotify(s);
+                isNoticed = true;
+            } else if (!(hart < 40 || hart > 140) && isNoticed)
+                isNoticed = false;
         }
     }
 

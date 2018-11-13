@@ -208,14 +208,15 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
             public void onDeviceConnected(String name, String address) {
                 isConnected = true;
                 NotifyService.isConnected = true;
-                Toast.makeText(TabHostActivity.this, "디바이스와 연결되었습니다.", Toast.LENGTH_SHORT).show();
                 startService(new Intent(TabHostActivity.this, NotifyService.class));
                 new Thread(TabHostActivity.this).start();
+                Toast.makeText(TabHostActivity.this, "디바이스와 연결되었습니다.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onDeviceDisconnected() {
                 isConnected = false;
+                NotifyService.isConnected = false;
                 Toast.makeText(TabHostActivity.this, "디바이스와의 연결이 끊겼습니다.", Toast.LENGTH_SHORT).show();
                 connectDevice();
             }
