@@ -18,13 +18,13 @@ import static com.example.jyseo.han3.App.CHANNEL_ID;
 
 public class NotifyService extends Service {
 
-    public static int data, hart;
-    public static String flag;
+    public static int data = 0, hart = 0;
+    public static String flag = "hart";
 
-    public static boolean buzz;
-    public static boolean isBuzzed;
-    public static boolean isNoticed;
-    public static boolean isConnected;
+    public static boolean buzz = false;
+    public static boolean isBuzzed = false;
+    public static boolean isNoticed = false;
+    public static boolean isConnected = false;
 
     public static String id, nm, ph, ad;
 
@@ -58,6 +58,7 @@ public class NotifyService extends Service {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(p)
                 .build();
+        startForeground(1, notification);
         //알림서비스를 이용하기 위한 기본세팅
 
         new Thread(new Runnable() {
@@ -74,7 +75,6 @@ public class NotifyService extends Service {
             }
         }).start();
 
-        startForeground(1, notification);
         return START_NOT_STICKY;
     }
 
