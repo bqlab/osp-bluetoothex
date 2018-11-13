@@ -38,7 +38,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
-public class TabHostActivity extends AppCompatActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener {
+public class TabHostActivity extends AppCompatActivity implements View.OnClickListener, Runnable, TimePickerDialog.OnTimeSetListener {
     private final int L1 = 1;
     private final int L2 = 2;
     private final int L3 = 3;
@@ -52,11 +52,8 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     private Layout2 l2;
     private Layout3 l3;
 
-    private boolean isNoticed = false;
     private boolean isConnected = false;
     private BluetoothSPP bluetoothSPP;
-
-    public int hart = 80;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +91,23 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public void run() {
+        while (isConnected) {
+            try {
+                Thread.sleep(1000);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        l1.setHartrate(Integer.toString(NotifyService.hart));
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, i);
@@ -123,7 +137,9 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         fc.addView(l1);
         fc.addView(l2);
         fc.addView(l3);
+
         callLayout(L1);
+        l1.setHartrate(Integer.toString(0));
 
         l2.setActivity(this);
         l2.layout2Time.setOnClickListener(new View.OnClickListener() {
@@ -184,20 +200,22 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
         bluetoothSPP.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             @Override
             public void onDataReceived(byte[] data, String message) {
-                hart = Integer.parseInt(message);
-
+                NotifyService.data = Integer.parseInt(message);
             }
         });
         bluetoothSPP.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
             @Override
             public void onDeviceConnected(String name, String address) {
+                isConnected = true;
+                NotifyService.isConnected = true;
                 Toast.makeText(TabHostActivity.this, "디바이스와 연결되었습니다.", Toast.LENGTH_SHORT).show();
                 startService(new Intent(TabHostActivity.this, NotifyService.class));
-                isConnected = true;
+                new Thread(TabHostActivity.this).start();
             }
 
             @Override
             public void onDeviceDisconnected() {
+                isConnected = false;
                 Toast.makeText(TabHostActivity.this, "디바이스와의 연결이 끊겼습니다.", Toast.LENGTH_SHORT).show();
                 connectDevice();
             }
@@ -226,10 +244,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     public void connectDevice() {
         startActivityForResult(new Intent(getApplicationContext(), DeviceList.class), BluetoothState.REQUEST_CONNECT_DEVICE);
         Toast.makeText(this, "연결할 디바이스를 선택하세요.", Toast.LENGTH_LONG).show();
-    }
-
-    public void checkHartrate() {
-        l1.setHartrate(Integer.toString(hart));
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
