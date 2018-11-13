@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Debug;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
@@ -193,6 +194,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void setBluetoothSPP() {
+        bluetoothSPP = new BluetoothSPP(this);
         if (!bluetoothSPP.isBluetoothAvailable()) {
             Toast.makeText(this, "블루투스를 사용할 수 없습니다.", Toast.LENGTH_LONG).show();
             finish();
