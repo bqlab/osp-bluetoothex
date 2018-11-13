@@ -77,6 +77,7 @@ public class NotifyService extends Service implements Runnable {
     }
 
     public void checkData() {
+        Log.d("데이터", String.valueOf(data));
         if (data == 254) {
             data = 0;
             String s = "디바이스의 부저 버튼이 눌렸습니다. 사용자의 주소는 " + ad + "입니다.";
