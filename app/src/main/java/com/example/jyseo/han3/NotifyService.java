@@ -79,9 +79,9 @@ public class NotifyService extends Service {
     }
 
     public void checkData() {
-        if (data == 254)
+        if (data == 255)
             flag = "hart";
-        else if (data == 255)
+        else if (data == 254)
             flag = "buzz";
         else {
             if (flag.equals("hart")) {

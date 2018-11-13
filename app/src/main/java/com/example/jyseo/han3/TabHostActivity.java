@@ -38,7 +38,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
-public class TabHostActivity extends AppCompatActivity implements View.OnClickListener, Runnable, TimePickerDialog.OnTimeSetListener {
+public class TabHostActivity extends AppCompatActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener {
     private final int L1 = 1;
     private final int L2 = 2;
     private final int L3 = 3;
@@ -62,7 +62,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tap_host);
-        Log.d("오늘 요일은?", String.valueOf(Calendar.DAY_OF_WEEK));
         init();
         setBluetoothSPP();
         connectBluetooth();
@@ -93,24 +92,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
                 callLayout(L3);
         }
     }
-
-    @Override
-    public void run() {
-        while (isConnected) {
-            try {
-                Thread.sleep(1000);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkHartrate();
-                    }
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
@@ -204,13 +185,14 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onDataReceived(byte[] data, String message) {
                 hart = Integer.parseInt(message);
+
             }
         });
         bluetoothSPP.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
             @Override
             public void onDeviceConnected(String name, String address) {
                 Toast.makeText(TabHostActivity.this, "디바이스와 연결되었습니다.", Toast.LENGTH_SHORT).show();
-                new Thread(TabHostActivity.this).start();
+                startService(new Intent(TabHostActivity.this, NotifyService.class));
                 isConnected = true;
             }
 
