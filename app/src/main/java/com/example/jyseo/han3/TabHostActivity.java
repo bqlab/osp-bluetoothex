@@ -92,6 +92,17 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, i);
+        c.set(Calendar.MINUTE, i1);
+        c.set(Calendar.SECOND, 0);
+
+        l2.updateTimeText(c);
+        l2.startAlarm(c);
+    }
+
+    @Override
     public void run() {
         while (isConnected) {
             try {
@@ -106,17 +117,6 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, i);
-        c.set(Calendar.MINUTE, i1);
-        c.set(Calendar.SECOND, 0);
-
-        l2.updateTimeText(c);
-        l2.startAlarm(c);
     }
 
     public void init() {
@@ -202,6 +202,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onDataReceived(byte[] data, String message) {
                 NotifyService.data = Integer.parseInt(message);
+                Log.d("데이터", message);
             }
         });
         bluetoothSPP.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
@@ -210,7 +211,9 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
                 isConnected = true;
                 NotifyService.isConnected = true;
                 new Thread(TabHostActivity.this).start();
-                startService(new Intent(TabHostActivity.this, NotifyService.class));
+                Intent i = new Intent(TabHostActivity.this, NotifyService.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startService(i);
                 Toast.makeText(TabHostActivity.this, "디바이스와 연결되었습니다.", Toast.LENGTH_SHORT).show();
             }
 

@@ -78,13 +78,13 @@ public class NotifyService extends Service implements Runnable {
 
     public void checkData() {
         Log.d("데이터", String.valueOf(data));
-        if (data == 254) {
+        if (data == 1) {
             data = 0;
             String s = "디바이스의 부저 버튼이 눌렸습니다. 사용자의 주소는 " + ad + "입니다.";
             emergencyNotify(s);
         } else {
             hart = data;
-            if (hart != 0) {
+            if (hart > 1) {
                 if ((hart < 40 || hart > 140) && !isNoticed) {
                     String s = "디바이스가 40을 초과하거나 140 미만의 심박수를 감지했습니다. 사용자의 주소는 " + ad + "입니다.";
                     emergencyNotify(s);
