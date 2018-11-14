@@ -211,9 +211,7 @@ public class TabHostActivity extends AppCompatActivity implements View.OnClickLi
                 isConnected = true;
                 NotifyService.isConnected = true;
                 new Thread(TabHostActivity.this).start();
-                Intent i = new Intent(TabHostActivity.this, NotifyService.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startService(i);
+                startService(new Intent(TabHostActivity.this, NotifyService.class));
                 Toast.makeText(TabHostActivity.this, "디바이스와 연결되었습니다.", Toast.LENGTH_SHORT).show();
             }
 

@@ -77,7 +77,6 @@ public class NotifyService extends Service implements Runnable {
     }
 
     public void checkData() {
-        Log.d("데이터", String.valueOf(data));
         if (data == 1) {
             data = 0;
             String s = "디바이스의 부저 버튼이 눌렸습니다. 사용자의 주소는 " + ad + "입니다.";
@@ -132,9 +131,15 @@ public class NotifyService extends Service implements Runnable {
         }
 
         String oneonenine = "000"; //이 부분 119로 바꾸시면 돼요
+
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(ph, null, content, null, null);
         smsManager.sendTextMessage(oneonenine, null, content, null, null);
-        startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:" + ph)));
+
+        Intent i = new Intent(Intent.ACTION_CALL);
+        i.setData(Uri.parse("tel:" + ph));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_FROM_BACKGROUND);
+        startActivity(i);
     }
 }
