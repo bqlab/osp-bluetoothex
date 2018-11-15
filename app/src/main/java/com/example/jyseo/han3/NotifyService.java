@@ -67,12 +67,7 @@ public class NotifyService extends Service implements Runnable {
     @Override
     public void run() {
         while (isConnected) {
-            try {
-                Thread.sleep(200);
-                checkData();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            checkData();
         }
     }
 
